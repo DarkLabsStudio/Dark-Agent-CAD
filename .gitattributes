@@ -1,0 +1,15 @@
+# Preserve source and documentation as LF on all platforms.
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.gitignore text eol=lf
+
+# STEP is a text format, but its exact bytes should not be line-ending-normalized.
+# Generated STEP files commonly contain trailing spaces; do not treat those as
+# source whitespace errors.
+*.step -text -whitespace
+*.stp -text -whitespace
+
+# Raster previews are binary.
+*.png binary

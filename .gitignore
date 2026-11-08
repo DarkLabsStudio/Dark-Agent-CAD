@@ -1,0 +1,27 @@
+# Local virtual environment
+cad-env/
+.venv/
+venv/
+
+# Generated build artifacts
+/exports/
+/renders/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Temporary files
+.tmp/
+*.tmp
+*.log
+
+# Editor and OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
