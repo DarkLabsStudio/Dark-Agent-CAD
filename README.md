@@ -120,6 +120,7 @@ its steps in order.
 Dark-Agent-Cad/
 ├── README.md                 # Human instructions and the agent prompt
 ├── setup.md                  # Agent-followable setup and acceptance contract
+├── LICENSE                   # MIT license
 ├── requirements.txt          # Python 3.12 dependency pins
 ├── scripts/
 │   ├── template_part.py      # Reference bracket geometry
@@ -201,3 +202,9 @@ most common issues are:
   artifacts that simple painters-algorithm previews show on internal channels.
 - AgentCAD is installed as part of the environment pin set, but the example
   runner does not require an AgentCAD server or viewer.
+
+## License
+
+Dark Agent Cad is released under the MIT License. See [LICENSE](LICENSE).
+
+Copyright (c) 2026 DarkLabsStudio.
