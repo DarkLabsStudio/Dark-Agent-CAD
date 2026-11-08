@@ -50,7 +50,7 @@ If you already have the repository folder, skip the clone and run the remaining
 commands from its root.
 
 ```powershell
-git clone <your-repository-url> Dark-Agent-Cad
+git clone https://github.com/DarkLabsStudio/Dark-Agent-CAD.git Dark-Agent-Cad
 cd Dark-Agent-Cad
 
 py -3.12 -m venv cad-env
