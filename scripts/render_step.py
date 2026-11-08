@@ -45,6 +45,7 @@ def render_step(
     azim: float = -55.0,
     width_px: int = 1600,
     height_px: int = 1100,
+    color: tuple[float, float, float] = (0.52, 0.64, 0.76),
 ) -> None:
     shape = import_step(str(step_path))
     if cut_z is not None:
@@ -83,7 +84,7 @@ def render_step(
 
     actor = vtk.vtkActor()
     actor.SetMapper(mapper)
-    actor.GetProperty().SetColor(0.52, 0.64, 0.76)
+    actor.GetProperty().SetColor(*color)
     actor.GetProperty().SetAmbient(0.22)
     actor.GetProperty().SetDiffuse(0.78)
     actor.GetProperty().SetSpecular(0.35)
@@ -151,6 +152,14 @@ def main() -> int:
     )
     parser.add_argument("--elev", type=float, default=24.0, help="View elevation")
     parser.add_argument("--azim", type=float, default=-55.0, help="View azimuth")
+    parser.add_argument(
+        "--color",
+        nargs=3,
+        type=float,
+        metavar=("R", "G", "B"),
+        default=(0.52, 0.64, 0.76),
+        help="Actor color as three 0-1 RGB values",
+    )
     args = parser.parse_args()
 
     render_step(
@@ -160,6 +169,7 @@ def main() -> int:
         cut_z=args.cut_z,
         elev=args.elev,
         azim=args.azim,
+        color=tuple(args.color),
     )
     print(f"Rendered {args.step} -> {args.png}")
     return 0

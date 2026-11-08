@@ -12,9 +12,14 @@ produce reviewable artifacts without opening a GUI.
 | Reference bracket | `scripts/template_part.py` | `exports/generated_bracket.step` | 100 x 50 x 14 mm |
 | Pull handle | `scripts/handle.py` | `exports/handle.step` | 180 x 34 x 57 mm |
 | Liquid-cooling block | `scripts/cooling_block.py` | `exports/cooling_block.step` | 120 x 80 x 25 mm |
+| P-trap fitting | `scripts/p_trap.py` | `exports/p_trap.step` | 210 x 72 x 177 mm |
 
 The cooling block has an 8 mm internal four-pass serpentine channel, two 10 mm
 vertical ports on 18 mm bosses, and four M4 counterbored mounting holes.
+
+The P-trap is a hollow 42 mm OD, 3 mm wall plumbing fitting with a 120 mm
+centerline U-bend, ribbed union nuts at both ends, a 45 degree outlet elbow, and
+a slip ring with a mounting tab.
 
 ### Cooling block preview
 
@@ -32,6 +37,10 @@ aid: the channel void is exported as one connected, watertight solid.
 ### Pull handle preview
 
 ![Pull handle](examples/previews/handle.png)
+
+### P-trap preview
+
+![P-trap fitting](examples/previews/p_trap.png)
 
 ## Prerequisites
 
@@ -58,13 +67,14 @@ py -3.12 -m venv cad-env
 .\cad-env\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Verify the environment and all three example parts:
+Verify the environment and all four example parts:
 
 ```powershell
 .\cad-env\Scripts\python.exe -m pip check
 .\cad-env\Scripts\python.exe scripts\runner.py scripts\template_part.py --expect exports\generated_bracket.step
 .\cad-env\Scripts\python.exe scripts\runner.py scripts\handle.py --expect exports\handle.step
 .\cad-env\Scripts\python.exe scripts\runner.py scripts\cooling_block.py --expect exports\cooling_block.step
+.\cad-env\Scripts\python.exe scripts\runner.py scripts\p_trap.py --expect exports\p_trap.step
 ```
 
 Each command should print `PASS` and exit with code `0`. The runner writes a
@@ -78,6 +88,7 @@ Render previews:
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\cooling_block.step renders\cooling_block.png
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\cooling_block.step renders\cooling_block_section.png --cut-z 10 --elev 52 --azim -62
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\cooling_block.step renders\cooling_block_plan.png --cut-z 10 --elev 89.9 --azim -90
+.\cad-env\Scripts\python.exe scripts\render_step.py exports\p_trap.step renders\p_trap.png --elev 12 --azim -60 --color 0.30 0.30 0.32
 ```
 
 ## Use this repository with a coding agent
@@ -91,7 +102,7 @@ Cad repository. Read setup.md and follow it end to end.
 
 Use Python 3.12.x and the pinned packages in requirements.txt. Do not upgrade
 build123d beyond 0.11. Create the isolated cad-env virtual environment, install
-the dependencies, verify the imports, and run all three example parts through
+the dependencies, verify the imports, and run all four example parts through
 scripts/runner.py.
 
 Do not change the intended part geometry to make a check pass. If something
@@ -114,6 +125,7 @@ Dark-Agent-Cad/
 │   ├── template_part.py      # Reference bracket geometry
 │   ├── handle.py             # Parametric pull handle
 │   ├── cooling_block.py      # Liquid-cooling cold plate
+│   ├── p_trap.py             # Hollow P-trap plumbing fitting
 │   ├── runner.py             # Compile + import + watertight verifier
 │   └── render_step.py        # Headless VTK STEP -> PNG renderer
 └── examples/
@@ -122,6 +134,7 @@ Dark-Agent-Cad/
     ├── handle.step           # Exported pull handle
     ├── cooling_block.step    # Exported cooling block
     ├── cooling_channel.step  # Internal channel void, for inspection
+    ├── p_trap.step           # Exported P-trap fitting
     └── previews/             # Pre-rendered PNG previews
 ```
 
@@ -158,6 +171,7 @@ file write.
 | Bracket | 1 | yes | yes | 49,207.345115 | 100 x 50 x 14 |
 | Handle | 1 | yes | yes | 67,808.678012 | 180 x 34 x 57 |
 | Cooling block | 1 | yes | yes | 170,270.571434 | 120 x 80 x 25 |
+| P-trap | 1 | yes | yes | 269,165.016841 | 210.0 x 72.0 x 177.4 |
 
 Small OpenCascade version differences can change the last few volume digits.
 Treat a matching bounding box plus a valid, manifold solid as the hard

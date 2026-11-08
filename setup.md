@@ -166,7 +166,7 @@ reproducible.
 
 ## 5. Validate the example parts
 
-Run all three checks from the repository root.
+Run all four checks from the repository root.
 
 ### Windows PowerShell
 
@@ -174,6 +174,7 @@ Run all three checks from the repository root.
 .\cad-env\Scripts\python.exe scripts\runner.py scripts\template_part.py --expect exports\generated_bracket.step
 .\cad-env\Scripts\python.exe scripts\runner.py scripts\handle.py --expect exports\handle.step
 .\cad-env\Scripts\python.exe scripts\runner.py scripts\cooling_block.py --expect exports\cooling_block.step
+.\cad-env\Scripts\python.exe scripts\runner.py scripts\p_trap.py --expect exports\p_trap.step
 ```
 
 ### macOS / Linux
@@ -182,6 +183,7 @@ Run all three checks from the repository root.
 ./cad-env/bin/python scripts/runner.py scripts/template_part.py --expect exports/generated_bracket.step
 ./cad-env/bin/python scripts/runner.py scripts/handle.py --expect exports/handle.step
 ./cad-env/bin/python scripts/runner.py scripts/cooling_block.py --expect exports/cooling_block.step
+./cad-env/bin/python scripts/runner.py scripts/p_trap.py --expect exports/p_trap.step
 ```
 
 Each command must print a final `PASS` and exit with code `0`. The runner:
@@ -200,6 +202,7 @@ Expected geometry:
 | Bracket | 1 | yes | yes | 49,207.345115 | 100 x 50 x 14 |
 | Handle | 1 | yes | yes | 67,808.678012 | 180 x 34 x 57 |
 | Cooling block | 1 | yes | yes | 170,270.571434 | 120 x 80 x 25 |
+| P-trap | 1 | yes | yes | 269,165.016841 | 210.0 x 72.0 x 177.4 |
 
 Small OpenCascade version differences can change the last few volume digits.
 The hard requirements are: one valid, manifold solid, and the expected bounding
@@ -223,6 +226,7 @@ required.
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\cooling_block.step renders\cooling_block.png
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\cooling_block.step renders\cooling_block_section.png --cut-z 10 --elev 52 --azim -62
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\cooling_block.step renders\cooling_block_plan.png --cut-z 10 --elev 89.9 --azim -90
+.\cad-env\Scripts\python.exe scripts\render_step.py exports\p_trap.step renders\p_trap.png --elev 12 --azim -60 --color 0.30 0.30 0.32
 ```
 
 ### macOS / Linux
@@ -232,6 +236,7 @@ required.
 ./cad-env/bin/python scripts/render_step.py exports/cooling_block.step renders/cooling_block.png
 ./cad-env/bin/python scripts/render_step.py exports/cooling_block.step renders/cooling_block_section.png --cut-z 10 --elev 52 --azim -62
 ./cad-env/bin/python scripts/render_step.py exports/cooling_block.step renders/cooling_block_plan.png --cut-z 10 --elev 89.9 --azim -90
+./cad-env/bin/python scripts/render_step.py exports/p_trap.step renders/p_trap.png --elev 12 --azim -60 --color 0.30 0.30 0.32
 ```
 
 Confirm that each PNG exists and is non-empty. The section and plan views use a
@@ -250,7 +255,8 @@ Mark an item complete only when the command actually succeeded.
 - [ ] Bracket verification passes.
 - [ ] Handle verification passes.
 - [ ] Cooling block verification passes with the expected bounding box.
-- [ ] The three STEP files exist in `exports/` and are non-empty.
+- [ ] P-trap verification passes with the expected bounding box.
+- [ ] The four STEP files exist in `exports/` and are non-empty.
 - [ ] The requested preview PNGs exist and are non-empty.
 - [ ] No part geometry was changed just to make validation pass.
 - [ ] Any deviations or failures are documented in the final report.
@@ -269,6 +275,7 @@ PARTS:
   bracket:       PASS/FAIL - solids=..., volume=..., bbox=...
   handle:        PASS/FAIL - solids=..., volume=..., bbox=...
   cooling_block: PASS/FAIL - solids=..., volume=..., bbox=...
+  p_trap:        PASS/FAIL - solids=..., volume=..., bbox=...
 ARTIFACTS:
   ...
 DEVIATIONS:
