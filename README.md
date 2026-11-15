@@ -133,8 +133,15 @@ Copy the prompt below into your agent. The prompt deliberately delegates the
 details to `setup.md`, which is written as an agent-followable setup contract.
 
 ```text
-You are an autonomous CAD setup and verification agent working in the Dark Agent
-Cad repository. Read setup.md and follow it end to end.
+You are an autonomous CAD setup and verification agent for Dark Agent Cad.
+
+First clone the repository and enter it. If you are already inside a
+Dark-Agent-Cad working tree, skip the clone and continue from that directory.
+
+git clone https://github.com/DarkLabsStudio/Dark-Agent-CAD.git
+cd Dark-Agent-Cad
+
+Then read setup.md and follow it end to end.
 
 Use Python 3.12.x and the pinned packages in requirements.txt. Do not upgrade
 build123d beyond 0.11. Create the isolated cad-env virtual environment, install
