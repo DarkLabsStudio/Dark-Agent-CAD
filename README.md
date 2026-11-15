@@ -21,6 +21,9 @@ The P-trap is a hollow 42 mm OD, 3 mm wall plumbing fitting with a 120 mm
 centerline U-bend, ribbed union nuts at both ends, a 45 degree outlet elbow, and
 a slip ring with a mounting tab.
 
+An optional browser viewer in `viewer/` can open the STEP files interactively.
+It uses `online-3d-viewer` and is not installed by default.
+
 ### Cooling block preview
 
 ![Cooling block](examples/previews/cooling_block.png)
@@ -50,6 +53,8 @@ aid: the channel void is exported as one connected, watertight solid.
 - Git.
 - About 2 GB of free disk space for the virtual environment and dependency
   wheels.
+- **Optional:** Node.js 20+ and npm, only if you choose the optional interactive
+  browser viewer. The CAD build and VTK previews do not need Node.js.
 - Windows PowerShell commands are shown below; `setup.md` contains POSIX
   equivalents.
 
@@ -91,6 +96,37 @@ Render previews:
 .\cad-env\Scripts\python.exe scripts\render_step.py exports\p_trap.step renders\p_trap.png --elev 12 --azim -60 --color 0.30 0.30 0.32
 ```
 
+## Optional interactive viewer
+
+[`online-3d-viewer`](https://www.npmjs.com/package/online-3d-viewer) 0.18.0 is
+the MIT-licensed browser engine behind [3dviewer.net](https://3dviewer.net). It
+is a browser library, not a command-line tool. It imports STEP and several mesh
+formats and provides orbit, pan, and zoom inspection. It is **not installed by
+default** and is not needed for CAD validation or VTK previews.
+
+If you want the optional viewer:
+
+```powershell
+cd viewer
+npm install
+cd ..
+.\cad-env\Scripts\python.exe viewer\serve.py
+```
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd install` instead.
+
+Open <http://127.0.0.1:8000/viewer/>. The page loads the four checked-in
+examples and can also open a local STEP or mesh file. Serve the repository root;
+opening `viewer/index.html` directly with `file://` will not work.
+
+The first STEP import fetches `occt-import-js` from jsDelivr, so the viewer needs
+internet access for STEP. Use the VTK previews for fully offline review. See
+[`viewer/README.md`](viewer/README.md) for details and troubleshooting.
+
+If you use an agent, it must ask you with its question tool before installing
+this viewer, and proceed only if you explicitly choose to install it. Skipping
+the viewer has no effect on the CAD workflow.
+
 ## Use this repository with a coding agent
 
 Copy the prompt below into your agent. The prompt deliberately delegates the
@@ -104,6 +140,11 @@ Use Python 3.12.x and the pinned packages in requirements.txt. Do not upgrade
 build123d beyond 0.11. Create the isolated cad-env virtual environment, install
 the dependencies, verify the imports, and run all four example parts through
 scripts/runner.py.
+
+Do not install the optional Node.js browser viewer automatically. Before running
+npm install for viewer/, ask the human with your question tool and proceed only
+if they explicitly choose to install it. If they decline, skip the viewer; it is
+not required for CAD verification.
 
 Do not change the intended part geometry to make a check pass. If something
 fails, diagnose and fix the environment or the build123d API usage, then rerun
@@ -129,18 +170,27 @@ Dark-Agent-Cad/
 │   ├── p_trap.py             # Hollow P-trap plumbing fitting
 │   ├── runner.py             # Compile + import + watertight verifier
 │   └── render_step.py        # Headless VTK STEP -> PNG renderer
-└── examples/
-    ├── README.md             # Notes on the checked-in reference artifacts
-    ├── bracket.step          # Exported reference bracket
-    ├── handle.step           # Exported pull handle
-    ├── cooling_block.step    # Exported cooling block
-    ├── cooling_channel.step  # Internal channel void, for inspection
-    ├── p_trap.step           # Exported P-trap fitting
-    └── previews/             # Pre-rendered PNG previews
+├── examples/
+│   ├── README.md             # Notes on the checked-in reference artifacts
+│   ├── bracket.step          # Exported reference bracket
+│   ├── handle.step           # Exported pull handle
+│   ├── cooling_block.step    # Exported cooling block
+│   ├── cooling_channel.step  # Internal channel void, for inspection
+│   ├── p_trap.step           # Exported P-trap fitting
+│   └── previews/             # Pre-rendered PNG previews
+└── viewer/
+    ├── README.md             # Optional browser viewer notes
+    ├── package.json          # Pinned online-3d-viewer dependency
+    ├── package-lock.json     # npm lockfile
+    ├── index.html            # Viewer page
+    ├── viewer.js             # Viewer behavior
+    └── serve.py              # Local server for the repo root
 ```
 
-`cad-env/`, `exports/`, and `renders/` are generated locally and are ignored by
-Git. The checked-in `examples/` files are known-good reference outputs.
+`cad-env/`, `exports/`, `renders/`, and `viewer/node_modules/` are generated
+locally and are ignored by Git. The checked-in `examples/` files are known-good
+reference outputs. The optional browser viewer is not part of the CAD
+verification contract.
 
 ## Make a new part
 
@@ -193,11 +243,15 @@ most common issues are:
   `BuildPart` operation; use it directly inside `BuildPart`.
 - **`export_step` is called as a method:** build123d 0.10 uses
   `export_step(shape, path)`, not `shape.export_step(path)`.
+- **The optional viewer is blank or cannot import STEP:** serve the repository
+  root, not `viewer/`, and check that `npm install` completed. STEP import also
+  needs internet access to fetch `occt-import-js`; use the VTK previews offline.
 
 ## Notes
 
 - All geometry is generated deterministically from Python; no network access is
-  required to build the parts.
+  required to build the parts. The optional browser viewer is the exception:
+  its first STEP import needs internet access to fetch `occt-import-js`.
 - `render_step.py` uses VTK offscreen rendering, which avoids the depth-sorting
   artifacts that simple painters-algorithm previews show on internal channels.
 - AgentCAD is installed as part of the environment pin set, but the example

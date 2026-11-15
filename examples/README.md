@@ -21,3 +21,7 @@ kernel first.
 Regenerate the STEP files and previews with the commands in the repository
 `README.md` or `setup.md`. Generated copies in `exports/` and `renders/` are
 ignored by Git.
+
+The optional page in `viewer/` can load these STEP files interactively after
+`cd viewer && npm install` and `python viewer/serve.py`. It is not part of the
+CAD verification contract.

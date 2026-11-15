@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dark Agent Cad Viewer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: #eef1f5;
+      color: #18212b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-width: 320px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 20px;
+      background: #111820;
+      color: #f4f7fa;
+      box-shadow: 0 1px 10px rgb(0 0 0 / 18%);
+      z-index: 1;
+    }
+
+    .brand {
+      min-width: 180px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: #9aa8b8;
+      font-size: 12px;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #c8d2de;
+      font-size: 12px;
+    }
+
+    select,
+    button,
+    .file-button {
+      min-height: 34px;
+      border: 1px solid #334252;
+      border-radius: 7px;
+      background: #1c2733;
+      color: #f4f7fa;
+      font: inherit;
+      font-size: 12px;
+      padding: 7px 11px;
+      cursor: pointer;
+    }
+
+    select {
+      max-width: 220px;
+    }
+
+    button:hover,
+    .file-button:hover {
+      border-color: #5b7b9e;
+      background: #263647;
+    }
+
+    .file-button {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .file-button input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    main {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      background: #fff;
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 34px;
+      padding: 7px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #dce2e9;
+      color: #526171;
+      font-size: 12px;
+    }
+
+    #status.error {
+      color: #b42318;
+      font-weight: 600;
+    }
+
+    .hint {
+      color: #7a8795;
+      text-align: right;
+    }
+
+    @media (max-width: 760px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .controls {
+        justify-content: flex-start;
+      }
+
+      footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .hint {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>Dark Agent Cad</h1>
+      <p>Optional interactive STEP and mesh viewer</p>
+    </div>
+
+    <div class="controls">
+      <label class="control" for="model-select">
+        Example
+        <select id="model-select">
+          <option value="p_trap">P-trap fitting</option>
+          <option value="cooling_block">Liquid-cooling block</option>
+          <option value="handle">Pull handle</option>
+          <option value="bracket">Reference bracket</option>
+        </select>
+      </label>
+
+      <label class="file-button">
+        Open local model
+        <input
+          id="file-input"
+          type="file"
+          multiple
+          accept=".step,.stp,.stl,.obj,.off,.ply,.glb,.gltf,.3mf,.amf,.3dm,.iges,.igs,.brep,.fcstd,.dae,.wrl"
+        >
+      </label>
+
+      <button id="reload-model" type="button">Reload current model</button>
+    </div>
+  </header>
+
+  <main id="viewer" aria-label="Interactive 3D model viewer"></main>
+
+  <footer>
+    <span id="status" role="status" aria-live="polite">Starting viewer...</span>
+    <span class="hint">Drag to orbit · scroll to zoom · right-drag to pan</span>
+  </footer>
+
+  <noscript>
+    <p>This viewer requires JavaScript.</p>
+  </noscript>
+
+  <script src="./node_modules/online-3d-viewer/build/engine/o3dv.min.js"></script>
+  <script src="./viewer.js"></script>
+</body>
+</html>

@@ -15,6 +15,9 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
+# Optional browser viewer
+node_modules/
+
 # Temporary files
 .tmp/
 *.tmp

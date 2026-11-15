@@ -1,0 +1,10 @@
+{
+  "name": "dark-agent-cad-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Optional browser viewer for Dark Agent Cad STEP files.",
+  "license": "MIT",
+  "dependencies": {
+    "online-3d-viewer": "0.18.0"
+  }
+}

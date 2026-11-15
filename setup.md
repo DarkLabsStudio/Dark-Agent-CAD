@@ -17,10 +17,13 @@ the agent prompt from `README.md`.
 5. Do not change the intended part geometry to make a validation pass. If a
    check fails, diagnose the environment or the build123d API usage, fix that,
    and rerun the check.
-6. `cad-env/`, `exports/`, and `renders/` are local/generated and ignored by
-   Git. Do not commit them.
+6. `cad-env/`, `exports/`, `renders/`, and `viewer/node_modules/` are
+   local/generated and ignored by Git. Do not commit them.
 7. If you find pre-existing user changes, preserve them. Do not clean or reset
    the worktree.
+8. The browser viewer in `viewer/` is optional. Do **not** run `npm install`
+   automatically. Ask the human with the question tool and proceed only if they
+   explicitly choose to install it. Skipping it must not fail acceptance.
 
 ## 1. Detect the shell and Python
 
@@ -242,7 +245,61 @@ required.
 Confirm that each PNG exists and is non-empty. The section and plan views use a
 Z = 10 mm clip, which exposes the internal channel.
 
-## 7. Acceptance checklist
+## 7. Optional browser viewer
+
+This step is optional and is not part of the geometry acceptance contract.
+`online-3d-viewer` is a browser library, not a CLI. It adds npm dependencies in
+`viewer/` and enables interactive STEP inspection. Do not run `npm install`
+automatically.
+
+Ask the human with the question tool before installing it. Use a question like:
+
+```text
+Install the optional Online 3D Viewer?
+It adds Node.js/npm dependencies in viewer/ and enables interactive STEP
+inspection in a browser. It is not needed for CAD verification or VTK previews.
+[Install] [Skip]
+```
+
+Proceed only if the human chooses **Install**. If Node.js/npm is missing, do not
+install Node.js itself without a separate approval. If the human chooses
+**Skip**, leave `viewer/node_modules/` absent, continue with the Python workflow,
+and report `VIEWER: skipped`.
+
+### Windows PowerShell
+
+```powershell
+cd viewer
+npm install
+cd ..
+.\cad-env\Scripts\python.exe viewer\serve.py
+```
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd install` instead.
+
+### macOS / Linux
+
+```bash
+cd viewer
+npm install
+cd ..
+./cad-env/bin/python viewer/serve.py
+```
+
+Open <http://127.0.0.1:8000/viewer/>. Verify that the P-trap loads, that the
+Example menu switches between all four checked-in parts, and that
+**Open local model** accepts a STEP file. The status line must end with
+`Loaded ...`; a failed import must not be reported as a pass.
+
+The server must serve the repository root, not just `viewer/`. Do not open
+`viewer/index.html` with `file://`. The first STEP import fetches
+`occt-import-js` from jsDelivr, so STEP import needs internet access. For fully
+offline review, use the VTK PNGs from step 6.
+
+If the viewer is installed and verified, report `VIEWER: installed`; otherwise
+report `VIEWER: skipped`.
+
+## 8. Acceptance checklist
 
 Mark an item complete only when the command actually succeeded.
 
@@ -260,8 +317,10 @@ Mark an item complete only when the command actually succeeded.
 - [ ] The requested preview PNGs exist and are non-empty.
 - [ ] No part geometry was changed just to make validation pass.
 - [ ] Any deviations or failures are documented in the final report.
+- [ ] If the optional viewer was approved and installed, it loads all four
+      examples and a local STEP file. If it was skipped, this is not a failure.
 
-## 8. Required final report
+## 9. Required final report
 
 Return a concise report in this format:
 
@@ -278,6 +337,7 @@ PARTS:
   p_trap:        PASS/FAIL - solids=..., volume=..., bbox=...
 ARTIFACTS:
   ...
+VIEWER: installed or skipped (optional)
 DEVIATIONS:
   ...
 ```
@@ -286,7 +346,7 @@ If any check fails, set `STATUS: FAIL`, include the failing command and the
 important error lines, list what you changed, and do not describe the run as
 complete.
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 | Symptom | Cause and recovery |
 | --- | --- |
@@ -299,9 +359,13 @@ complete.
 | `BRep_API: command not done` during a chamfer | Remove the non-essential cosmetic chamfer, keep the verified base geometry, and report the change. |
 | A shape is valid but not manifold/watertight | Look for tangent or degenerate faces. Prefer a flat filleted cap or a robust boolean over tangent sphere caps; rerun the verifier after each geometry change. |
 | `py -3.12` is not found after installation | Open a new shell. If it is still missing, use the full interpreter path, commonly `%LOCALAPPDATA%\Programs\Python\Python312\python.exe`. |
+| Optional viewer says `Viewer engine not installed` | Run `cd viewer` then `npm install`, restart `viewer/serve.py`, and confirm `viewer/node_modules/online-3d-viewer/build/engine/o3dv.min.js` exists. |
+| Optional viewer stays on `Importing model...` | STEP import uses `occt-import-js` from jsDelivr. Check internet access and the browser console, or use the VTK previews offline. |
+| `npm.ps1 cannot be loaded` | PowerShell execution policy blocked the npm shim. Use `npm.cmd install` or adjust the policy for the current user. |
+| Optional viewer is blank or gets 404s | Serve the repository root, not `viewer/`, and open `/viewer/`. Do not use a `file://` URL. |
 | VTK preview fails in a headless environment | Offscreen VTK normally works; if the platform cannot create a context, report the preview as unavailable and still validate the STEP geometry. Do not mark the geometry check as failed because a preview failed. |
 
-## 10. Geometry guardrails for future parts
+## 11. Geometry guardrails for future parts
 
 - Keep export paths relative to the repository root, for example
   `exports/my_part.step`.
