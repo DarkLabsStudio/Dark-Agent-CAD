@@ -5,6 +5,18 @@ watertight-geometry verifier, STEP export, and headless VTK previews. It is
 designed to let a human or an AI coding agent generate a part, verify it, and
 produce reviewable artifacts without opening a GUI.
 
+## Companion repository
+
+This repository covers mechanical CAD. Its electronics companion is
+**[Dark-Agent-PCB](https://github.com/DarkLabsStudio/Dark-Agent-PCB)** — an
+agent-ready KiCad 10 workspace with schematic capture, PCB layout, BOM, Gerbers,
+drill files, and verification.
+
+Use **Dark-Agent-Cad** for enclosures, brackets, cooling blocks, fixtures, and other
+mechanical interfaces. Use **Dark-Agent-PCB** for the board that fits inside or mounts
+to those parts. The two repositories share the same agent-first, verify-before-report
+workflow.
+
 ## What is included
 
 | Part | Script | STEP artifact | Verified size |

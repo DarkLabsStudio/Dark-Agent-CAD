@@ -4,6 +4,11 @@ This file is the step-by-step setup and acceptance contract for **Dark Agent
 Cad**. It is written to be followed by an AI coding agent after the human copies
 the agent prompt from `README.md`.
 
+This repository covers mechanical CAD. The companion electronics repository is
+**[Dark-Agent-PCB](https://github.com/DarkLabsStudio/Dark-Agent-PCB)**: an agent-ready
+KiCad 10 workspace for schematics, PCB layout, BOM, Gerbers, drill files, and board
+verification. Use the two together when a mechanical design and a PCB need to fit.
+
 ## Operating rules
 
 1. Work from the repository root.
